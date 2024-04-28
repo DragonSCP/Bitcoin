@@ -1,28 +1,20 @@
-import importlib
+import os
+import sys
 
-def load_miner(coin):
-    """
-    Carrega dinamicamente o módulo de mineração para a criptomoeda escolhida.
-    """
+def load_miner(crypto):
     try:
-        miner_module = importlib.import_module(f"miners.{coin}.{coin}")
-        return miner_module
-    except ModuleNotFoundError:
-        print(f"Módulo de mineração para {coin} não encontrado.")
-        return None
+        miner_module = __import__(f"miners.{crypto}.{crypto}", fromlist=[None])
+        miner_module.mine()
+    except ImportError:
+        print(f"Miner for {crypto} not found.")
 
 def main():
-    print("Bem-vindo ao script de mineração de criptomoedas!")
-    coin = input("Digite o nome da criptomoeda que deseja minerar (bitcoin, ethereum, litecoin): ").lower().strip()
+    if len(sys.argv) < 2:
+        print("Usage: python main.py [cryptocurrency]")
+        sys.exit(1)
     
-    # Carrega o módulo de mineração da criptomoeda escolhida
-    miner = load_miner(coin)
-    
-    if miner:
-        print(f"Iniciando mineração de {coin}.")
-        miner.mine()
-    else:
-        print("Erro ao carregar o módulo de mineração.")
+    crypto = sys.argv[1].lower()
+    load_miner(crypto)
 
 if __name__ == "__main__":
     main()
