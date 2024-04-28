@@ -1,20 +1,20 @@
-import os
-import sys
-
-def load_miner(crypto):
-    try:
-        miner_module = __import__(f"miners.{crypto}.{crypto}", fromlist=[None])
-        miner_module.mine()
-    except ImportError:
-        print(f"Miner for {crypto} not found.")
+from miners.bitcoin import bitcoin
 
 def main():
-    if len(sys.argv) < 2:
-        print("Usage: python main.py [cryptocurrency]")
-        sys.exit(1)
-    
-    crypto = sys.argv[1].lower()
-    load_miner(crypto)
+    print("Bem-vindo ao Script de Mineração de Criptomoedas!")
+    print("Selecione a criptomoeda para mineração:")
+    print("1. Bitcoin")
+    # Futuras opções podem ser adicionadas aqui
+    choice = input("Digite o número da opção escolhida: ")
+
+    if choice == '1':
+        print("Você selecionou Bitcoin.")
+        wallet_address = input("Por favor, insira o endereço da sua carteira de Bitcoin: ")
+        pool_host = "pool.supportxmr.com:3333"  # Especifique o pool host
+        print("Iniciando a mineração de Bitcoin no pool " + pool_host)
+        bitcoin.mine(wallet_address, pool_host)
+    else:
+        print("Opção inválida!")
 
 if __name__ == "__main__":
     main()
